@@ -1,0 +1,6 @@
+{
+  "name": "GeoMock - Realistic Address & Data Generator",
+  "description": "Generate realistic formatted test addresses, postal codes, and synthetic testing data across 12 countries with 1-click copy, batch export, and standalone HTML generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
