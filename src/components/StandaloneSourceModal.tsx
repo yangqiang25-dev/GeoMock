@@ -14,14 +14,14 @@ export const StandaloneSourceModal: React.FC<StandaloneSourceModalProps> = ({ on
     const success = await copyToClipboard(STANDALONE_HTML_CODE);
     if (success) {
       setCopied(true);
-      onToast('已复制完整单文件 HTML/Tailwind/JS 源码至剪贴板！');
+      onToast('已复制 100% 纯离线单文件完整源码至剪贴板！');
       setTimeout(() => setCopied(false), 2000);
     }
   };
 
   const handleDownload = () => {
-    downloadFile(STANDALONE_HTML_CODE, 'geomock-standalone.html', 'text/html;charset=utf-8;');
-    onToast('已开始下载 geomock-standalone.html 单文件源码！');
+    downloadFile(STANDALONE_HTML_CODE, 'geomock-offline.html', 'text/html;charset=utf-8;');
+    onToast('已开始下载 geomock-offline.html 纯离线单文件！');
   };
 
   return (
@@ -32,22 +32,30 @@ export const StandaloneSourceModal: React.FC<StandaloneSourceModalProps> = ({ on
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-blue-100 text-blue-700">
+              <span className="p-1.5 rounded-lg bg-emerald-100 text-emerald-700">
                 <FileCode className="w-5 h-5" />
               </span>
               <h2 className="text-xl font-bold text-slate-900">
-                单文件独立完整源码 (Standalone HTML)
+                100% 纯离线单文件 (Offline Standalone HTML)
               </h2>
             </div>
-            <p className="text-xs text-slate-500 mt-1 max-w-2xl">
-              按照您的需求封装的 100% 单文件完整可运行源码。集成了 Tailwind CSS CDN、完整的 12 国地址生成逻辑、真实 GB11643 身份证校验算法、Luhn 信用卡号校验、单条与批量生成、以及全部一键复制功能。
+            <p className="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
+              专为<strong>脱机免部署离线使用</strong>打造：零 CDN 外部网络请求、零服务器环境依赖。下载后本地双击即可在任何电脑浏览器中直接运行全部功能，包括 12 国地址生成、<strong>美国五大免税州 (0% 消费税) 专属生成</strong>、离线 SVG 二维码生成、一键复制及批量 CSV/JSON/TXT 导出。
             </p>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
             <button
+              onClick={handleDownload}
+              className="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 rounded-lg transition flex items-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <Download className="w-4 h-4 text-white" />
+              <span>下载离线 HTML 文件</span>
+            </button>
+
+            <button
               onClick={handleCopyCode}
-              className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition flex items-center gap-1.5 shadow-xs"
+              className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-95 rounded-lg transition flex items-center gap-1.5 shadow-xs cursor-pointer"
             >
               {copied ? (
                 <>
@@ -62,22 +70,14 @@ export const StandaloneSourceModal: React.FC<StandaloneSourceModalProps> = ({ on
               )}
             </button>
 
-            <button
-              onClick={handleDownload}
-              className="px-4 py-2 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg transition flex items-center gap-1.5"
-            >
-              <Download className="w-4 h-4 text-blue-600" />
-              <span>下载 index.html</span>
-            </button>
-
             <a
-              href="/geomock-standalone.html"
+              href="/geomock-offline.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition flex items-center gap-1.5"
+              className="px-4 py-2 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition flex items-center gap-1.5 cursor-pointer"
             >
               <ExternalLink className="w-4 h-4 text-slate-600" />
-              <span>在新标签页打开</span>
+              <span>在独立窗口打开预览</span>
             </a>
           </div>
         </div>
@@ -87,9 +87,9 @@ export const StandaloneSourceModal: React.FC<StandaloneSourceModalProps> = ({ on
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <div className="font-semibold text-slate-800">零依赖，直接双击运行</div>
-              <div className="text-slate-500 text-[11px] mt-0.5">
-                不需要任何 Node.js、Vite 或打包工具，本地双击即可在任何浏览器中打开使用。
+              <div className="font-semibold text-slate-800">100% 脱机纯离线运行</div>
+              <div className="text-slate-500 text-[11px] mt-0.5 leading-relaxed">
+                所有 CSS 样式、SVG 图标与二维码算法全部内嵌于单文件中，不发送任何外部网络请求，拔网线或断网环境下完美运行。
               </div>
             </div>
           </div>
@@ -97,9 +97,9 @@ export const StandaloneSourceModal: React.FC<StandaloneSourceModalProps> = ({ on
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <div className="font-semibold text-slate-800">内嵌完整数据字典</div>
-              <div className="text-slate-500 text-[11px] mt-0.5">
-                包括美、英、中、日、德、法、加、澳、新、韩等国真实邮编格式、城市、街道和电话。
+              <div className="font-semibold text-slate-800">美国五大免税州完整支持</div>
+              <div className="text-slate-500 text-[11px] mt-0.5 leading-relaxed">
+                特拉华 (DE)、俄勒冈 (OR)、蒙大拿 (MT)、新罕布什尔 (NH)、阿拉斯加 (AK)，支持一键直达与仅免税州筛选。
               </div>
             </div>
           </div>
@@ -107,9 +107,9 @@ export const StandaloneSourceModal: React.FC<StandaloneSourceModalProps> = ({ on
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <div className="font-semibold text-slate-800">批量生成与格式导出</div>
-              <div className="text-slate-500 text-[11px] mt-0.5">
-                内置批量数据表格渲染、一键复制单行、信封多行、JSON、CSV、TXT 导出。
+              <div className="font-semibold text-slate-800">双击即用，零需部署</div>
+              <div className="text-slate-500 text-[11px] mt-0.5 leading-relaxed">
+                无需任何 Node.js、Vite 或 Web 服务器，直接下载保存到本地磁盘（如桌面、U盘），双击即可在任意现代浏览器运行。
               </div>
             </div>
           </div>
@@ -124,10 +124,10 @@ export const StandaloneSourceModal: React.FC<StandaloneSourceModalProps> = ({ on
             <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
             <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
             <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-            <span className="ml-2 font-mono text-slate-300 font-medium">geomock-standalone.html</span>
+            <span className="ml-2 font-mono text-slate-300 font-medium">geomock-offline.html (纯离线单文件)</span>
           </div>
-          <div className="font-mono text-[11px]">
-            {STANDALONE_HTML_CODE.split('\n').length} 行代码 · UTF-8
+          <div className="font-mono text-[11px] text-emerald-400 font-medium">
+            100% 离线脱机 · {STANDALONE_HTML_CODE.split('\n').length} 行代码 · UTF-8
           </div>
         </div>
 

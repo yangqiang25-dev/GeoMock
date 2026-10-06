@@ -92,6 +92,50 @@ export function exportToJSON(addresses: AddressData[]): string {
   return JSON.stringify(addresses, null, 2);
 }
 
+export interface TestSuiteJsonWrapper {
+  testSuiteName: string;
+  generatedBy: string;
+  exportedAt: string;
+  totalRecords: number;
+  countriesCovered: string[];
+  hasTaxFreeStateAddresses: boolean;
+  schemaDocumentation: {
+    description: string;
+    primaryKey: string;
+    sampleUsage: string;
+  };
+  records: AddressData[];
+}
+
+export function exportFavoritesToTestSuiteJSON(
+  favorites: AddressData[],
+  format: 'raw-array' | 'suite-wrapper' = 'raw-array'
+): string {
+  if (format === 'raw-array') {
+    return JSON.stringify(favorites, null, 2);
+  }
+
+  const uniqueCountries = Array.from(new Set(favorites.map((f) => f.country)));
+  const hasTaxFree = favorites.some((f) => f.isTaxFreeState);
+
+  const wrapper: TestSuiteJsonWrapper = {
+    testSuiteName: 'GeoMock Automated Test Fixtures',
+    generatedBy: 'GeoMock Studio',
+    exportedAt: new Date().toISOString(),
+    totalRecords: favorites.length,
+    countriesCovered: uniqueCountries,
+    hasTaxFreeStateAddresses: hasTaxFree,
+    schemaDocumentation: {
+      description: 'Synthetic high-fidelity address and user persona dataset for CI/CD automated test suites',
+      primaryKey: 'id',
+      sampleUsage: 'Use records array for data-driven testing in Jest, Playwright, Cypress, Postman Runner, or Pytest'
+    },
+    records: favorites
+  };
+
+  return JSON.stringify(wrapper, null, 2);
+}
+
 export function exportToTXT(addresses: AddressData[]): string {
   return addresses
     .map(

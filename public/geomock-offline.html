@@ -654,14 +654,22 @@
       <!-- ================= 选项卡 3: 本地收藏与历史 ================= -->
       <section id="viewSaved" class="space-y-6 hidden">
         <div class="card space-y-4">
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between flex-wrap gap-3">
             <div>
-              <span style="font-weight: 700; font-size: 15px; color: #0f172a;">本地已收藏地址</span>
+              <span style="font-weight: 700; font-size: 15px; color: #0f172a;">本地已收藏地址 (自动化测试夹具库)</span>
               <span style="font-size: 12px; color: #64748b; margin-left: 6px;">(保存在浏览器本地 localStorage 中，断网离线永久保留)</span>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="clearAllFavorites()">
-              <span>🗑️ 清空收藏</span>
-            </button>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button class="btn btn-emerald btn-sm" onclick="exportSavedFavoritesJson()" title="批量导出全部收藏地址为单个 JSON 测试套件文件，供 Playwright / Cypress / Jest / Postman 使用">
+                <span>💾 批量导出测试套件 JSON</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="copyAllSavedFavoritesJson()" title="复制全部收藏地址的 JSON 数组到剪贴板">
+                <span>📋 复制全部 JSON</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="clearAllFavorites()">
+                <span>🗑️ 清空收藏</span>
+              </button>
+            </div>
           </div>
 
           <div id="savedEmptyState" style="padding: 40px 16px; text-align: center; color: #94a3b8; font-size: 13px;">
@@ -1584,6 +1592,27 @@
       switchMainTab('single');
       generateSingleAddress();
       showToast('已载入收藏地址: ' + item.fullName);
+    }
+
+    /* 批量导出收藏夹为自动化测试套件单个 JSON 文件 */
+    function exportSavedFavoritesJson() {
+      if (!savedList || savedList.length === 0) {
+        showToast('收藏列表为空，请先在地址生成页面点击“收藏”！');
+        return;
+      }
+      const jsonContent = JSON.stringify(savedList, null, 2);
+      const filename = `geomock_favorites_test_suite_${new Date().toISOString().slice(0, 10)}.json`;
+      downloadLocalBlob(jsonContent, filename, 'application/json;charset=utf-8;');
+      showToast(`已成功导出 ${savedList.length} 条已收藏地址为测试套件 JSON 文件 (${filename})！`);
+    }
+
+    function copyAllSavedFavoritesJson() {
+      if (!savedList || savedList.length === 0) {
+        showToast('收藏列表为空，请先添加收藏！');
+        return;
+      }
+      const jsonContent = JSON.stringify(savedList, null, 2);
+      copyTextDirect(jsonContent, `已复制全部 ${savedList.length} 条已收藏地址 JSON 数据到剪贴板！`);
     }
 
     /* 批量生成与导出 */

@@ -149,6 +149,11 @@ export default function App() {
     showToast('已移除该收藏');
   };
 
+  const handleClearFavorites = () => {
+    setFavorites([]);
+    showToast('已清空全部收藏记录');
+  };
+
   const handleClearHistory = () => {
     setHistory([]);
     showToast('已清空全部历史记录');
@@ -175,6 +180,7 @@ export default function App() {
         onSelectCountry={handleCountryChange}
         onGenerateNew={() => handleGenerateSingle()}
         savedCount={favorites.length}
+        onToast={showToast}
       />
 
       {/* Main Viewport Container */}
@@ -224,6 +230,7 @@ export default function App() {
             history={history}
             onSelectAddress={handleSelectFromList}
             onRemoveFavorite={handleRemoveFavorite}
+            onClearFavorites={handleClearFavorites}
             onClearHistory={handleClearHistory}
             onToast={showToast}
           />
@@ -246,17 +253,17 @@ export default function App() {
           <div className="flex items-center gap-4 text-slate-600">
             <button
               onClick={() => setActiveTab('source')}
-              className="hover:text-blue-600 transition underline underline-offset-2"
+              className="hover:text-blue-600 transition underline underline-offset-2 cursor-pointer"
             >
-              单文件源码下载
+              纯离线单文件下载
             </button>
             <a
-              href="/geomock-standalone.html"
+              href="/geomock-offline.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-blue-600 transition underline underline-offset-2"
+              className="hover:text-blue-600 transition underline underline-offset-2 cursor-pointer font-medium text-emerald-700"
             >
-              静态离线版
+              100% 离线脱机版
             </a>
             <span>仅供开发测试与软件合规 QA 使用</span>
           </div>

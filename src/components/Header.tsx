@@ -1,7 +1,9 @@
 import React from 'react';
 import { CountryCode } from '../types/address';
 import { COUNTRIES } from '../data/countries';
-import { RefreshCw, Code, Bookmark, Layers, MapPin } from 'lucide-react';
+import { RefreshCw, Code, Bookmark, Layers, MapPin, Download } from 'lucide-react';
+import { STANDALONE_HTML_CODE } from '../utils/standaloneHtml';
+import { downloadFile } from '../utils/export';
 
 interface HeaderProps {
   activeTab: 'single' | 'batch' | 'saved' | 'source';
@@ -10,6 +12,7 @@ interface HeaderProps {
   onSelectCountry: (code: CountryCode) => void;
   onGenerateNew: () => void;
   savedCount: number;
+  onToast?: (msg: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,8 +21,15 @@ export const Header: React.FC<HeaderProps> = ({
   selectedCountry,
   onSelectCountry,
   onGenerateNew,
-  savedCount
+  savedCount,
+  onToast
 }) => {
+  const handleDownloadOffline = () => {
+    downloadFile(STANDALONE_HTML_CODE, 'geomock-offline.html', 'text/html;charset=utf-8;');
+    if (onToast) {
+      onToast('已开始下载 geomock-offline.html 纯离线单文件！双击即可离线使用');
+    }
+  };
   return (
     <header className="border-b border-slate-200 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -92,7 +102,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <Code className="w-4 h-4" />
-              <span>单文件源码</span>
+              <span>离线单文件</span>
             </button>
           </nav>
         </div>
@@ -117,6 +127,16 @@ export const Header: React.FC<HeaderProps> = ({
               ▼
             </div>
           </div>
+
+          {/* Download offline HTML single-file direct button */}
+          <button
+            onClick={handleDownloadOffline}
+            title="下载 100% 离线脱机单文件 HTML（双击即用，无需服务器和部署）"
+            className="hidden sm:inline-flex px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 active:scale-95 transition-all rounded-lg items-center gap-1.5 shadow-2xs whitespace-nowrap cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-600" />
+            <span>下载离线 HTML</span>
+          </button>
 
           <button
             onClick={onGenerateNew}
@@ -153,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={() => setActiveTab('source')}
           className={`px-3 py-1 rounded ${activeTab === 'source' ? 'text-blue-600 font-bold' : 'text-slate-600'}`}
         >
-          单文件源码
+          离线单文件
         </button>
       </div>
     </header>
